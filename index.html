@@ -1,0 +1,227 @@
+<!---------------------------------------------->
+<!-- Program/Website Name: Road Sign Test     -->
+<!-- Filename: index.html				      -->
+<!-- Developer: Hunter A. McCabe		      -->
+<!-- Date last modified: [2019.05.13]         -->
+<!---------------------------------------------->
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <title>Road Sign Test</title>
+    <link rel='stylesheet' href='css/normalize.css' type='text/css'>
+    <link rel='stylesheet' href='css/fancy/animate.css' type='text/css'>
+    <link rel='stylesheet' href='css/fancy/custom.css' type='text/css'>
+    <link rel='stylesheet' href='css/style.css' type='text/css'>
+    <script src='js/main.js'></script>
+    <script src='https://use.fontawesome.com/releases/v5.0.1/js/all.js'></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="description" content=""> <!-- Description of the Web Page -->
+    <meta name="keywords" content=""> <!-- Keywords separated by commas -->
+    <meta name="author" content="Hunter McCabe">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        #container {
+            width: 600px;
+            margin: 0 auto;
+            border: 1px solid black;
+        }
+
+        #img_container {
+            width: 120px;
+            margin: auto;
+        }
+
+        #start_btn {
+            text-align: center;
+        }
+
+        span {
+            font-weight: 600;
+        }
+
+        #answers {
+            width: 500px;
+            margin: auto;
+            text-align: center;
+        }
+
+        #ttl {
+            width: 600px;
+        }
+
+        #start_btn {
+            display: none;
+        }
+
+        #correct {
+            color: green;
+        }
+
+        #incorrect {
+            color: red;
+        }
+
+        #ttlquestions {
+            color: blue;
+        }
+
+        #score {
+            float: right;
+        }
+
+        #msg {
+            float: left;
+        }
+
+    </style>
+    <script>
+        var correct = 0;
+        var incorrect = 0;
+        var ttlquestions = 0;
+
+        function startTest() {
+            enable();
+            $("div[id='answers']").show();
+            $("div[id='img_container']").show();
+            $(generateQuestion);
+        }
+        var road_signs = new Array('img/2waytraffic.png', 'img/crossroad.png', 'img/dividedhighway.png', 'img/hill.png', 'img/lanereduction.png', 'img/merge.png', 'img/railroad.png', 'img/schoolcrossing.png', 'img/sharpturnahead.png', 'img/sideroad.png', 'img/signalahead.png', 'img/slipperywhenwet.png', 'img/stopsignahead.png', 'img/windingroad.png', 'img/yieldahead.png');
+        var x;
+        var answer;
+
+
+        function generateQuestion() {
+            enable();
+            if (ttlquestions == 12) {
+                finishTest();
+                return;
+            }
+            x = Math.floor(Math.random() * road_signs.length);
+            $("#img").attr("src", road_signs[x]);
+
+            $("div[id='msg']").html("");
+            ttlquestions++;
+            updateDisplay();
+        }
+
+        function submitQuestion() {
+            answer = $("input[name='answer']:checked").val();
+            checkAns(answer);
+        }
+
+        function checkAns(ans) {
+            if (road_signs[x] == ans) {
+                $("div[id='msg']").css({
+                    "color": "green"
+                });
+                $("div[id='msg']").html("Correct!<br><button onclick='nextQuestion()'>Next</button>");
+                disable();
+                correct++;
+                updateDisplay();
+            }
+            if (road_signs[x] != ans) {
+                $("div[id='msg']").css({
+                    "color": "red"
+                });
+                $("div[id='msg']").html("Incorrect...<br><button onclick='nextQuestion()'>Next</button>");
+                disable();
+                incorrect++;
+                updateDisplay();
+            }
+        }
+
+        function nextQuestion() {
+            generateQuestion();
+        }
+
+        function updateDisplay() {
+            $("#correct").html(correct);
+            $("#incorrect").html(incorrect);
+            $("#ttlquestions").html(ttlquestions);
+        }
+
+        function finishTest() {
+            if (correct >= 10) {
+                document.write("<h1 style='text-align:center;color:green;'>You Passed!</h1><br><p style='text-align:center'>Correct: <span id='correct'>" + correct + "</span> Incorrect: <span id='incorrect'>" + incorrect + "</span><br><br><span style='text-align:center;color:green;font-size:25px;'>" + numeral(correct / ttlquestions).format("0%") + "</span></p>");
+            }
+            if (correct < 10) {
+                document.write("<h1 style='text-align:center;color:red;'>You Failed!</h1><br><p style='text-align:center'>Correct: <span id='correct'>" + correct + "</span> Incorrect: <span id='incorrect'>" + incorrect + "</span><br><br><span style='text-align:center;color:red;font-size:25px;'>" + numeral(correct / ttlquestions).format("0%") + "</span></p>");
+            }
+        }
+
+        function disable() {
+            document.getElementById("btn").disabled = true;
+        }
+
+        function enable() {
+            document.getElementById("btn").disabled = false;
+        }
+
+    </script>
+</head>
+
+<body onLoad="startTest()">
+    <div id="container">
+        <div id="title">
+            <img id="ttl" src="img/title.png">
+        </div>
+        <div id="img_container">
+            <img width="120px" id="img" src="">
+        </div>
+        <!--<div id="start_btn"><button onclick="startTest()" id="start">Start Test</button></div>-->
+        <div id="answers">
+            <form name="answer_bubbles">
+                <input type="radio" value="img/sharpturnahead.png" name="answer"><span>Sharp Turn Ahead</span>
+
+                <input type="radio" value="img/dividedhighway.png" name="answer"><span>Divided Highway</span>
+
+                <input type="radio" value="img/windingroad.png" name="answer"><span>Winding Road</span>
+
+                <input type="radio" value="img/merge.png" name="answer"><span>Merge</span>
+                <br>
+                <br>
+                <input type="radio" value="img/hill.png" name="answer"><span>Hill</span>
+
+                <input type="radio" value="img/lanereduction.png" name="answer"><span>Lane Reduction Ahead</span>
+
+                <input type="radio" value="img/crossroad.png" name="answer"><span>Cross Road</span>
+
+                <input type="radio" value="img/railroad.png" name="answer"><span>Railroad Crossing</span>
+                <br>
+                <br>
+                <input type="radio" value="img/schoolcrossing.png" name="answer"><span>School Crossing</span>
+
+                <input type="radio" value="img/slipperywhenwet.png" name="answer"><span>Slippery When Wet</span>
+
+                <input type="radio" value="img/yieldahead.png" name="answer"><span>Yield Ahead</span>
+
+                <input type="radio" value="img/signalahead.png" name="answer"><span>Signal Ahead</span>
+                <br>
+                <br>
+                <input type="radio" value="img/sideroad.png" name="answer"><span>Side Road</span>
+
+                <input type="radio" value="img/stopsignahead.png" name="answer"><span>Stop Sign Ahead</span>
+
+                <input type="radio" value="img/2waytraffic.png" name="answer"><span>2 Lane Traffic</span>
+
+                <input type="radio" value="img/.png" name="answer"><span>No Passing Zone</span>
+
+                <br>
+                <br>
+                <input type="button" id='btn' onclick="submitQuestion()" value="Submit">
+            </form>
+
+        </div>
+        <br>
+        <div id="score"><span style="color:green;">Correct:</span> <span id="correct"></span><br><span style="color:red;">Incorrect:</span> <span id="incorrect"></span><br><span style="color:blue;">Total Questions:</span> <span id="ttlquestions"></span></div>
+        <div id="msg">
+
+        </div>
+
+    </div>
+</body>
+
+</html>
